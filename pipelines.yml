@@ -1,0 +1,8 @@
+pipelines:
+  - name: hello_world
+    steps:
+      - name: say_hello
+        type: Bash
+        execution:
+          onExecute:
+            - echo "Hello, World!"
