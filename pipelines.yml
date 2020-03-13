@@ -14,8 +14,6 @@ pipelines:
         type: Bash
         configuration:
           affinityGroup: ag_hello_world_img
-          inputSteps:
-            - name: say_hello
           environmentVariables:
             IMG_NAME: rageshk-docker-local.jfrog.io/hello-world:${run_number}
         execution:
