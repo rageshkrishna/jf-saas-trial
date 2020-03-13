@@ -20,7 +20,7 @@ pipelines:
           onExecute:
             - docker pull hello-world
             - docker tag hello-world ${IMG_NAME}
-            - add_run_variable IMAGE_TO_PUSH=${IMG_NAME}
+            - add_run_variables IMAGE_TO_PUSH=${IMG_NAME}
       - name: push_image
         type: Bash
         configuration:
