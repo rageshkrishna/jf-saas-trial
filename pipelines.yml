@@ -1,8 +1,36 @@
+resources:
+  - name: img_hello_world
+    type: Image
+    configuration:
+      registry: admin_art_docker_local
+      sourceRepository: docker-local
+      imageName: rageshk-docker-local.jfrog.io/hello-world
+      imageTag: latest
+
 pipelines:
   - name: hello_world
     steps:
-      - name: say_hello
+      - name: pull_and_tag_image
         type: Bash
+        configuration:
+          affinityGroup: ag_hello_world_img
+          inputSteps:
+            - name: say_hello
+          environmentVariables:
+            IMG_NAME: rageshk-docker-local.jfrog.io/hello-world:${run_number}
         execution:
           onExecute:
-            - echo "Hello, World!"
+            - docker pull hello-world
+            - docker tag hello-world ${IMG_NAME}
+            - add_run_variable IMAGE_TO_PUSH=${IMG_NAME}
+      - name: push_image
+        type: Bash
+        configuration:
+          affinityGroup: ag_hello_world_img
+          inputSteps:
+            - name: pull_and_tag_image
+          integrations:
+            - name: admin_art_docker_local
+        execution:
+          onExecute:
+            - docker push ${IMAGE_TO_PUSH}
